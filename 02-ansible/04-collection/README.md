@@ -384,6 +384,11 @@ ansible-galaxy collection install -r requirements.yml -p ./collections
 <details>
 <summary>✅ Verification: Playbook uses FQCN and lints cleanly</summary>
 
+> **Dev Spaces note:** The workspace image pre-sets `ANSIBLE_COLLECTIONS_PATHS` to a default location. Environment variables take precedence over `ansible.cfg` in Ansible's precedence ladder, so `ansible-lint` may ignore your `collections_paths` setting and fail to find the role. Unset it first:
+> ```bash
+> unset ANSIBLE_COLLECTIONS_PATHS
+> ```
+
 ```bash
 cd /projects/ansible-dev-tools-workspace/acmecorp-playbook
 ansible-lint site.yml
@@ -399,7 +404,7 @@ ansible-navigator run site.yml -i inventory/ --mode stdout --ee false
 
 <details>
 <summary>✅ Verification: Playbook runs with FQCN role</summary>
-
+  
 **Expected task output:**
 ```
 TASK [acme.mycollection.role_acmecorp_setup : Create workspace base directory] **
