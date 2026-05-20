@@ -140,6 +140,7 @@ authors:
 description: Workshop collection for Ansible Development Tools
 
 license_file: LICENSE
+repository: https://github.com/acme/mycollection
 
 tags:
   - linux
@@ -163,14 +164,15 @@ build_ignore:
 
 **`build_ignore`** works like `.gitignore` for `ansible-galaxy collection build` — it prevents development artifacts (`.venv`, `collections/`) from bloating the published tarball.
 
-This collection is local and will not be published to Galaxy or Automation Hub, so two rules that require publication metadata can be safely suppressed. Create `.ansible-lint` at the collection root:
+**`repository`** is required by `ansible-lint`'s `galaxy[no-repository]` rule. Even for a local workshop collection, a placeholder URL satisfies the rule and reflects good practice — any real collection should point to its source repository.
+
+This collection is local and will not be published to Galaxy or Automation Hub, so one rule that requires publication metadata can be safely suppressed. Create `.ansible-lint` at the collection root:
 
 ```yaml
 ---
 profile: production
 
 skip_list:
-  - galaxy[no-repository]   # local workshop collection, not published
   - galaxy[no-changelog]    # no changelog needed for workshop use
 ```
 
@@ -181,7 +183,7 @@ skip_list:
 ansible-lint /projects/ansible-dev-tools-workspace/acme.mycollection/galaxy.yml
 ```
 
-No errors means the file has a valid namespace, name, version, SPDX licence, and `repository` key.
+No errors means the file has a valid namespace, name, version, SPDX licence, and `repository` key. If you see `galaxy[no-repository]`, you forgot to add the `repository` field above.
 
 </details>
 
@@ -384,7 +386,7 @@ ansible-galaxy collection install -r requirements.yml -p ./collections
 <details>
 <summary>✅ Verification: Playbook uses FQCN and lints cleanly</summary>
 
-> **Dev Spaces note:** The workspace image pre-sets `ANSIBLE_COLLECTIONS_PATHS` to a default location. Environment variables take precedence over `ansible.cfg` in Ansible's precedence ladder, so `ansible-lint` may ignore your `collections_paths` setting and fail to find the role. Should this step fail, unset it first:
+> **Dev Spaces note:** The workspace image pre-sets `ANSIBLE_COLLECTIONS_PATHS` to a default location. Environment variables take precedence over `ansible.cfg` in Ansible's precedence ladder, so `ansible-lint` may ignore your `collections_paths` setting and fail to find the role. Unset it first:
 > ```bash
 > unset ANSIBLE_COLLECTIONS_PATHS
 > ```
@@ -404,7 +406,7 @@ ansible-navigator run site.yml -i inventory/ --mode stdout --ee false
 
 <details>
 <summary>✅ Verification: Playbook runs with FQCN role</summary>
-  
+
 **Expected task output:**
 ```
 TASK [acme.mycollection.role_acmecorp_setup : Create workspace base directory] **
