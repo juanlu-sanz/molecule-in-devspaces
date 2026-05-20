@@ -1,0 +1,195 @@
+# devfile.yaml
+# Root devfile for the Ansible + Molecule Workshop
+# Place this at the repository root for automatic Dev Spaces detection
+schemaVersion: 2.2.0
+metadata:
+  name: ansible-molecule-workshop
+  version: 1.0.0
+  displayName: Ansible + Molecule Workshop
+  description: Complete development environment for Ansible and Molecule testing workshop
+  language: yaml
+  projectType: ansible
+  tags:
+    - ansible
+    - molecule
+    - openshift
+    - devspaces
+    - workshop
+attributes:
+  controller.devfile.io/storage-type: per-workspace
+
+components:
+  - name: workshop-tools
+    attributes:
+      container-overrides:
+        securityContext:
+          privileged: true
+    container:
+      image: ghcr.io/juanlu-sanz/nested-podman-devspaces:latest
+      memoryLimit: 4Gi
+      cpuLimit: 1000m
+      cpuRequest: 500m
+      mountSources: true
+      env:
+        - name: CONTAINER_HOST
+          value: ""
+        - name: ANSIBLE_COLLECTIONS_PATH
+          value: /projects/.ansible/collections
+        - name: ANSIBLE_ROLES_PATH
+          value: /projects/roles
+        - name: ANSIBLE_HOST_KEY_CHECKING
+          value: "false"
+        - name: MOLECULE_NO_LOG
+          value: "false"
+        - name: PY_COLORS
+          value: "1"
+        - name: ANSIBLE_FORCE_COLOR
+          value: "true"
+        - name: TERM
+          value: xterm-256color
+      volumeMounts:
+        - name: workshop-cache
+          path: /home/user/.cache
+        - name: ansible-data
+          path: /home/user/.ansible
+      endpoints:
+        - name: workshop-docs
+          targetPort: 8000
+          exposure: public
+          protocol: http
+
+  - name: workshop-cache
+    volume:
+      size: 5Gi
+
+  - name: ansible-data
+    volume:
+      size: 2Gi
+
+commands:
+  - id: setup-podman
+    exec:
+      component: workshop-tools
+      commandLine: |
+        unset CONTAINER_HOST &&
+        echo "=== Configuring Podman for local use ===" &&
+        mkdir -p /run/user/$(id -u)/podman &&
+        podman system service --time=0 unix:///run/user/$(id -u)/podman/podman.sock &
+        sleep 2 &&
+        podman info >/dev/null 2>&1 && echo "=== Podman service started ===" || echo "WARNING: Podman service failed to start"
+      label: "Start Podman Service"
+
+  - id: setup-workshop
+    exec:
+      component: workshop-tools
+      commandLine: |
+        echo "=== Setting up Workshop Environment ===" &&
+        pip install --user \
+          ansible-dev-tools \
+          "molecule-plugins[podman]" \
+          pytest-testinfra \
+          jmespath \
+          netaddr &&
+        if [ -f requirements.yml ]; then
+          ansible-galaxy collection install -r requirements.yml --force
+        fi &&
+        echo "=== Workshop Environment Ready ==="
+      workingDir: ${PROJECT_SOURCE}
+      label: "Setup Workshop Environment"
+      group:
+        kind: build
+        isDefault: true
+
+  - id: verify-tools
+    exec:
+      component: workshop-tools
+      commandLine: |
+        echo "=== Verifying Tool Installation ===" &&
+        echo "ADT Version:" && adt --version &&
+        echo "=== All Tools Verified ==="
+      workingDir: ${PROJECT_SOURCE}
+      label: "Verify Tool Installation"
+
+  - id: lint-all
+    exec:
+      component: workshop-tools
+      commandLine: |
+        echo "Running YAML lint..." &&
+        yamllint . &&
+        echo "Running Ansible lint..." &&
+        ansible-lint .
+      workingDir: ${PROJECT_SOURCE}
+      label: "Run All Linters"
+      group:
+        kind: test
+
+  - id: molecule-test
+    exec:
+      component: workshop-tools
+      commandLine: |
+        if [ -d "roles/workshop_webserver" ]; then
+          cd roles/workshop_webserver && molecule test
+        else
+          echo "Role not found. Create it first with: ansible-galaxy role init roles/workshop_webserver"
+        fi
+      workingDir: ${PROJECT_SOURCE}
+      label: "Run Molecule Test"
+      group:
+        kind: test
+        isDefault: true
+
+  - id: molecule-converge
+    exec:
+      component: workshop-tools
+      commandLine: cd roles/workshop_webserver && molecule converge
+      workingDir: ${PROJECT_SOURCE}
+      label: "Molecule Converge"
+
+  - id: molecule-verify
+    exec:
+      component: workshop-tools
+      commandLine: cd roles/workshop_webserver && molecule verify
+      workingDir: ${PROJECT_SOURCE}
+      label: "Molecule Verify"
+
+  - id: molecule-destroy
+    exec:
+      component: workshop-tools
+      commandLine: cd roles/workshop_webserver && molecule destroy
+      workingDir: ${PROJECT_SOURCE}
+      label: "Molecule Destroy"
+
+  - id: molecule-login
+    exec:
+      component: workshop-tools
+      commandLine: cd roles/workshop_webserver && molecule login
+      workingDir: ${PROJECT_SOURCE}
+      label: "Molecule Login"
+
+  - id: serve-docs
+    exec:
+      component: workshop-tools
+      commandLine: |
+        pip install --user mkdocs mkdocs-material 2>/dev/null &&
+        python -m http.server 8000
+      workingDir: ${PROJECT_SOURCE}
+      label: "Serve Documentation"
+
+  - id: create-role
+    exec:
+      component: workshop-tools
+      commandLine: |
+        echo "Enter role name:" &&
+        read role_name &&
+        ansible-galaxy role init roles/${role_name} &&
+        mkdir -p roles/${role_name}/molecule/default &&
+        cd roles/${role_name} &&
+        molecule init scenario --driver-name podman &&
+        echo "Role ${role_name} created with Molecule scaffold"
+      workingDir: ${PROJECT_SOURCE}
+      label: "Create New Ansible Role"
+
+events:
+  postStart:
+    - setup-podman
+    - setup-workshop

@@ -1,0 +1,42 @@
+schemaVersion: 2.2.0
+metadata:
+  name: ansible-molecule-nested-podman
+  displayName: Ansible + Molecule (Podman Driver)
+  description: Workspace with nested container support for Molecule podman driver
+attributes:
+  controller.devfile.io/storage-type: per-workspace
+
+components:
+  - name: dev-tools
+    attributes:
+      container-overrides:
+        securityContext:
+          privileged: true
+    container:
+      image: ghcr.io/juanlu-sanz/nested-podman-devspaces:latest
+      memoryLimit: 4Gi
+      cpuLimit: 1000m
+      cpuRequest: 500m
+      mountSources: true
+      env:
+        - name: SHELL
+          value: "/bin/bash"
+        - name: CONTAINER_HOST
+          value: ""
+        - name: ANSIBLE_FORCE_COLOR
+          value: "true"
+        - name: MOLECULE_NO_LOG
+          value: "false"
+        - name: PY_COLORS
+          value: "1"
+
+commands:
+  - id: molecule-test
+    exec:
+      component: dev-tools
+      commandLine: molecule test
+      workingDir: ${PROJECT_SOURCE}
+      label: "Run Molecule Test"
+      group:
+        kind: test
+        isDefault: true

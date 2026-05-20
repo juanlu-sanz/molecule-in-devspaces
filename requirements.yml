@@ -1,0 +1,33 @@
+---
+# requirements.yml - Ansible Workshop Dependencies
+# Install with: ansible-galaxy collection install -r requirements.yml
+
+collections:
+  # Core Ansible modules
+  - name: ansible.builtin
+
+  # POSIX modules for Linux systems
+  - name: ansible.posix
+    version: ">=1.5.0"
+
+  # General purpose utilities
+  - name: community.general
+    version: ">=8.0.0"
+
+  # Cryptography utilities
+  - name: community.crypto
+    version: ">=2.0.0"
+
+  # Kubernetes/OpenShift integration
+  - name: kubernetes.core
+    version: ">=3.0.0"
+
+  # Red Hat OpenShift collection
+  - name: redhat.openshift
+    version: ">=3.0.0"
+
+  # Uncomment for Red Hat certified content (requires Automation Hub access)
+  # - name: redhat.rhel_system_roles
+  #   source: https://cloud.redhat.com/api/automation-hub/
+
+roles: []
