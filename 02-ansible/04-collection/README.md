@@ -384,7 +384,7 @@ ansible-galaxy collection install -r requirements.yml -p ./collections
 <details>
 <summary>✅ Verification: Playbook uses FQCN and lints cleanly</summary>
 
-> **Dev Spaces note:** The workspace image pre-sets `ANSIBLE_COLLECTIONS_PATHS` to a default location. Environment variables take precedence over `ansible.cfg` in Ansible's precedence ladder, so `ansible-lint` may ignore your `collections_paths` setting and fail to find the role. Unset it first:
+> **Dev Spaces note:** The workspace image pre-sets `ANSIBLE_COLLECTIONS_PATHS` to a default location. Environment variables take precedence over `ansible.cfg` in Ansible's precedence ladder, so `ansible-lint` may ignore your `collections_paths` setting and fail to find the role. Should this step fail, unset it first:
 > ```bash
 > unset ANSIBLE_COLLECTIONS_PATHS
 > ```
