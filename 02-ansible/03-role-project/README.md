@@ -57,7 +57,7 @@ Create a `roles/` directory in your workspace and initialize the role using the 
 > ```bash
 > mkdir -p /projects/ansible-dev-tools-workspace/roles
 > cd /projects/ansible-dev-tools-workspace/roles
-> ansible-creator init role role_acmecorp_setup
+> ansible-galaxy role init role_acmecorp_setup
 > ```
 
 <details>
