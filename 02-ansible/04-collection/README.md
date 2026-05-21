@@ -282,7 +282,7 @@ Copy the standalone role directory directly into the collection:
 
 ```bash
 mkdir -p /projects/ansible-dev-tools-workspace/acme.mycollection/roles
-cp -r /projects/ansible-dev-tools-workspace/roles/role_acmecorp_setup \
+cp -r /projects/ansible-dev-tools-workspace/role_acmecorp_setup \
       /projects/ansible-dev-tools-workspace/acme.mycollection/roles/
 ```
 
