@@ -326,11 +326,11 @@ To actually use the EE with `ansible-navigator` in a real environment (outside D
 ```bash
 # Works outside Dev Spaces, or after pushing the image to a registry
 ansible-navigator run \
-  /projects/ansible-dev-tools-workspace/acmecorp-playbook/site.yml \
+  /projects/ansible-dev-tools-workspace/site.yml \
   --execution-environment-image localhost/acme-ui-fs-ee:latest \
   --pull-policy never \
   --mode stdout \
-  -i /projects/ansible-dev-tools-workspace/acmecorp-playbook/inventory/
+  -i /projects/ansible-dev-tools-workspace/inventory/
 ```
 
 ### Workaround — run with `ansible-playbook` directly
@@ -338,7 +338,7 @@ ansible-navigator run \
 The collection is already installed locally from Step 4. Run the playbook without an EE:
 
 ```bash
-cd /projects/ansible-dev-tools-workspace/acmecorp-playbook
+cd /projects/ansible-dev-tools-workspace
 ansible-playbook -i inventory/ site.yml
 ```
 
