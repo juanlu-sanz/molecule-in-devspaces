@@ -7,14 +7,16 @@ Run the `integration_hello_world` scenario with the podman driver, observe the f
 ## Prerequisites
 
 - Completed Step 1 (Introduction) — `molecule.yml` updated to podman, `converge.yml` updated to `hosts: all`, `vars.yml` fixed
-- Collection available via editable install:
+- Collection available via editable install with the venv activated:
 
 ```bash
 cd /projects/ansible-dev-tools-workspace/acme.mycollection
 ade install -e .
+source .venv/bin/activate
+unset ANSIBLE_COLLECTIONS_PATH
 ```
 
-> `ade install -e .` sets up the collection so Ansible can find it by FQCN. Tools (molecule, ansible-core) are already in the image — this only configures the collection paths.
+> **Dev Spaces note:** The workspace image pre-sets `ANSIBLE_COLLECTIONS_PATH` to a default location. Environment variables take precedence over `ansible.cfg` in Ansible's precedence ladder, so Molecule may ignore your `collections_path` setting and fail to find the collection. Unsetting it lets the activated venv's `ansible-core` use its own default search paths, which include the venv's site-packages where `ade install -e .` placed the editable install.
 
 ---
 
@@ -99,7 +101,7 @@ Ansible runs on the **host** (workspace pod) and connects to the test container 
       collections_path: ${ANSIBLE_COLLECTIONS_PATH}
 ```
 
-Passes the collections path so Ansible can resolve FQCNs like `acme.mycollection.sample_filter`.
+Passes the collections path so Ansible can resolve FQCNs like `acme.mycollection.sample_filter`. This only works correctly when `ANSIBLE_COLLECTIONS_PATH` has been unset (see Prerequisites above) — the Dev Spaces default value points to the system collections location and does not include the editable install in the venv.
 
 <details>
 <summary>✅ Verification: Scenario files in place</summary>
