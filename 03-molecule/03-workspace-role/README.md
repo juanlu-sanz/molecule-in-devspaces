@@ -8,14 +8,23 @@ Write a Molecule scenario that tests the `role_acmecorp_setup` role you created 
 
 - Completed Steps 1–2 of this module
 - `role_acmecorp_setup` role exists at `acme.mycollection/roles/role_acmecorp_setup/`
-- Collection editable install active with the venv activated:
+- `requirements.txt` contains the podman driver (set in Step 1). Confirm and reinstall with the venv activated:
 
 ```bash
 cd /projects/ansible-dev-tools-workspace/acme.mycollection
+grep molecule-plugins requirements.txt   # must show molecule-plugins[podman]
 ade install -e .
 source .venv/bin/activate
 unset ANSIBLE_COLLECTIONS_PATH
 ```
+
+> If `grep` returns nothing, `requirements.txt` was not updated in Step 1. Add the line first:
+> ```bash
+> echo "molecule-plugins[podman]" >> requirements.txt
+> ade install -e .
+> source .venv/bin/activate
+> unset ANSIBLE_COLLECTIONS_PATH
+> ```
 
 > **Dev Spaces note:** The workspace image pre-sets `ANSIBLE_COLLECTIONS_PATH` to a default location that does not include the venv. Unsetting it lets the activated venv's `ansible-core` use its own default search paths, which include the editable install.
 
