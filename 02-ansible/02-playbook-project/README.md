@@ -41,12 +41,12 @@ Using the VS Code extension is the recommended path — it provides a guided wiz
 | Collection | `acmecollection` |
 | Destination directory | `/projects/ansible-dev-tools-workspace/acmecorp-playbook` |
 
+4. Click **Create**
+
 > **Note:** The destination directory may differ depending on the configuration of your particular Dev Spaces instance. To make your life easier when following the instructions, simply create a symlink:
 > ```bash
 > ln -s /projects/WORKDIR /projects/ansible-dev-tools-workspace
 > ```
-
-4. Click **Create**
 
 **CLI equivalent:**
 
@@ -64,7 +64,7 @@ ansible-creator init playbook acme.acmecollection \
   /projects/ansible-dev-tools-workspace/acmecorp-playbook
 ```
 
-> `acme.acmecollection` is the `<namespace>.<name>` collection name (matches the values entered in the wizard above). The path argument is the destination directory; when omitted, the project is created in the current working directory.
+> `acme.acmecollection` is the `<namespace>.<name>` argument used to pre-fill metadata in the generated files — you are creating a **playbook project**, not a collection. The path argument is the destination directory; when omitted, the project is created in the current working directory.
 
 <details>
 <summary>✅ Verification: Project scaffolded</summary>
