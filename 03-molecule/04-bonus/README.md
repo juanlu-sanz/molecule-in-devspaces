@@ -88,11 +88,15 @@ build_ignore:
   - collections
 ```
 
-Install dependencies:
+Install dependencies and activate the venv:
 
 ```bash
 ade install -e .
+source .venv/bin/activate
+unset ANSIBLE_COLLECTIONS_PATH
 ```
+
+> **Dev Spaces note:** The workspace image pre-sets `ANSIBLE_COLLECTIONS_PATH` to a default location that does not include the venv. Unsetting it lets the activated venv's `ansible-core` use its own default search paths, which include the editable install.
 
 <details>
 <summary>✅ Verification: RHEL System Roles installed</summary>
@@ -329,6 +333,8 @@ cat /projects/ansible-dev-tools-workspace/acme.infra/extensions/molecule/integra
 ---
 
 ## Step 4.5: Run the tests
+
+> Make sure the venv is still activated and `ANSIBLE_COLLECTIONS_PATH` is unset (see Step 4.2). If you opened a new terminal, re-run `source .venv/bin/activate && unset ANSIBLE_COLLECTIONS_PATH` first.
 
 ```bash
 cd /projects/ansible-dev-tools-workspace/acme.infra/extensions
