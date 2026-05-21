@@ -31,11 +31,11 @@ unset ANSIBLE_COLLECTIONS_PATH
 ### Confirm changes from Step 1
 
 ```bash
-grep dirname extensions/molecule/utils/vars/vars.yml
 grep "hosts: all" extensions/molecule/utils/playbooks/converge.yml
+grep "MOLECULE_SCENARIO_DIRECTORY" extensions/molecule/utils/playbooks/converge.yml
 ```
 
-Both should return matches. If not, go back to Step 1 and apply the fixes.
+Both should return matches. If not, go back to Step 1 and apply the fixes to `converge.yml`.
 
 ---
 
