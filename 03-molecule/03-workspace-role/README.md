@@ -8,23 +8,27 @@ Write a Molecule scenario that tests the `role_acmecorp_setup` role you created 
 
 - Completed Steps 1–2 of this module
 - `role_acmecorp_setup` role exists at `acme.mycollection/roles/role_acmecorp_setup/`
-- `requirements.txt` contains the podman driver (set in Step 1). Confirm and reinstall with the venv activated:
+- `requirements.txt` contains the podman driver and `galaxy.yml` contains `containers.podman` (both set in Step 1). Run all of the following from the **collection root** — not from `extensions/`:
 
 ```bash
 cd /projects/ansible-dev-tools-workspace/acme.mycollection
-grep molecule-plugins requirements.txt   # must show molecule-plugins[podman]
+grep molecule-plugins requirements.txt        # must show molecule-plugins[podman]
+grep containers.podman galaxy.yml             # must show containers.podman
 ade install -e .
 source .venv/bin/activate
 unset ANSIBLE_COLLECTIONS_PATH
 ```
 
-> If `grep` returns nothing, `requirements.txt` was not updated in Step 1. Add the line first:
+> If either `grep` returns nothing, the Step 1 updates were not applied. Add the missing entries and reinstall:
 > ```bash
-> echo "molecule-plugins[podman]" >> requirements.txt
+> echo "molecule-plugins[podman]" >> requirements.txt          # if missing
+> # add "containers.podman": "*" to galaxy.yml dependencies   # if missing
 > ade install -e .
 > source .venv/bin/activate
 > unset ANSIBLE_COLLECTIONS_PATH
 > ```
+
+> **Important:** Always run `ade install`, `source .venv/bin/activate`, and `unset ANSIBLE_COLLECTIONS_PATH` from the collection root (`acme.mycollection/`). The `.venv` directory does not exist inside `extensions/`.
 
 > **Dev Spaces note:** The workspace image pre-sets `ANSIBLE_COLLECTIONS_PATH` to a default location that does not include the venv. Unsetting it lets the activated venv's `ansible-core` use its own default search paths, which include the editable install.
 
