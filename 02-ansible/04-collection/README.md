@@ -307,7 +307,7 @@ roles/role_acmecorp_setup/vars/main.yml
 
 </details>
 
-Before linting, fix the scaffolded `tests/test.yml` — the generated play has no `name:`, which violates the `name[play]` best practice. Open the file and replace its contents:
+Before linting, fix the scaffolded `tests/test.yml`, `handlers/main.yml` and `vars/main.yml` files — the generated play has no `name:`, which violates the `name[play]` best practice. Open the file and replace its contents:
 
 ```yaml
 # SPDX-License-Identifier: MIT-0
