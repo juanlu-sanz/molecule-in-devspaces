@@ -41,6 +41,11 @@ Using the VS Code extension is the recommended path — it provides a guided wiz
 | Collection | `acmecollection` |
 | Destination directory | `/projects/ansible-dev-tools-workspace/acmecorp-playbook` |
 
+> **Note:** Destination directory may differ from the one listed depending on the configuration of the particular instance of DevSpaces. To solve it and make your life easier following the instructions simply do
+> ``bash
+> ln -s /projects/WORKDIR /projects/ansible-dev-tools-workspace
+> ```
+
 4. Click **Create**
 
 **CLI equivalent:**
