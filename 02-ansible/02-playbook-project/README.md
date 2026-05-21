@@ -41,8 +41,8 @@ Using the VS Code extension is the recommended path — it provides a guided wiz
 | Collection | `acmecollection` |
 | Destination directory | `/projects/ansible-dev-tools-workspace/acmecorp-playbook` |
 
-> **Note:** Destination directory may differ from the one listed depending on the configuration of the particular instance of DevSpaces. To solve it and make your life easier following the instructions simply do
-> ``bash
+> **Note:** The destination directory may differ depending on the configuration of your particular Dev Spaces instance. To make your life easier when following the instructions, simply create a symlink:
+> ```bash
 > ln -s /projects/WORKDIR /projects/ansible-dev-tools-workspace
 > ```
 
