@@ -157,7 +157,7 @@ The collection is not yet published to Ansible Galaxy, so it must be packaged as
 
 ```bash
 cd /projects/ansible-dev-tools-workspace/acme.mycollection
-ansible-galaxy collection build \\
+ansible-galaxy collection build \
   --output-path /projects/ansible-dev-tools-workspace/acme-ui-fs-ee/
 ```
 
