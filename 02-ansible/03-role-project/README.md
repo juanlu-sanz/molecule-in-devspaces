@@ -218,8 +218,8 @@ Rather than overwriting the playbook from Step 2, rename it first so both approa
 **Rename the existing inline-tasks playbook:**
 
 ```bash
-mv /projects/ansible-dev-tools-workspace/acmecorp-playbook/site.yml \
-   /projects/ansible-dev-tools-workspace/acmecorp-playbook/site-standalone.yml
+mv /projects/ansible-dev-tools-workspace/site.yml \
+   /projects/ansible-dev-tools-workspace/site-standalone.yml
 ```
 
 **Create a new `acmecorp-playbook/site.yml`** that delegates to the role instead:
