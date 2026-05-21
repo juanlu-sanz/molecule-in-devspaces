@@ -236,7 +236,7 @@ mv /projects/ansible-dev-tools-workspace/site.yml \
 
 > **Why keep both?** `site-standalone.yml` shows the *inline tasks* approach — everything visible in one file, good for simple one-off automation. `site.yml` shows the *role* approach — logic encapsulated, reusable, and testable with Molecule. As the workshop progresses, the role gets packaged into a collection (Step 4) and then into an EE (Step 5), so you can look back at `site-standalone.yml` to appreciate how much structure each layer adds.
 
-**Update `acmecorp-playbook/ansible.cfg`** to tell Ansible where to find the role:
+**Update `ansible.cfg`** to tell Ansible where to find the role:
 
 ```ini
 [defaults]
@@ -250,7 +250,7 @@ The `roles_path` points to the directory containing `role_acmecorp_setup/`. Ansi
 <summary>✅ Verification: Both playbooks lint cleanly</summary>
 
 ```bash
-cd /projects/ansible-dev-tools-workspace/acmecorp-playbook
+cd /projects/ansible-dev-tools-workspace
 ansible-lint site.yml
 ```
 
@@ -261,7 +261,7 @@ ansible-lint site.yml
 ## Step 3.7: Run the updated playbook
 
 ```bash
-cd /projects/ansible-dev-tools-workspace/acmecorp-playbook
+cd /projects/ansible-dev-tools-workspace
 ansible-navigator run site.yml -i inventory/ --mode stdout --ee false
 ```
 
