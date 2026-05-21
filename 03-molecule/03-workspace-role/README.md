@@ -39,7 +39,7 @@ grep "hosts: all" extensions/molecule/utils/playbooks/converge.yml
 grep "MOLECULE_SCENARIO_DIRECTORY" extensions/molecule/utils/playbooks/converge.yml
 ```
 
-Both should return matches. If not, go back to Step 1 and apply the fixes to `converge.yml`.
+Both should return matches. If either returns empty, the `converge.yml` update from Step 1 was not applied. Go to [Step 1.4 — Where Molecule lives in the collection](../01-introduction/README.md#step-14-where-molecule-lives-in-the-collection) and replace the contents of `extensions/molecule/utils/playbooks/converge.yml` as described under **Update `converge.yml` to target the container**.
 
 ---
 
