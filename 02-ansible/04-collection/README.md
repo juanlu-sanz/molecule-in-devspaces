@@ -336,7 +336,7 @@ ansible-lint roles/role_acmecorp_setup/
 
 Now that the role lives inside `acme.mycollection`, update the playbook project to consume it through the collection rather than via a local `roles_path`.
 
-**Update `acmecorp-playbook/requirements.yml`** to declare the collection dependency:
+**Update `requirements.yml`** to declare the collection dependency:
 
 ```yaml
 ---
@@ -356,7 +356,7 @@ First, deactivate the collection virtualenv — you are now working in the playb
 deactivate
 ```
 
-Update `acmecorp-playbook/ansible.cfg` to point to the local collections directory and remove `roles_path` (no longer needed):
+Update `ansible.cfg` to point to the local collections directory and remove `roles_path` (no longer needed):
 
 ```ini
 [defaults]
@@ -367,11 +367,11 @@ collections_paths = ./collections
 Then install:
 
 ```bash
-cd /projects/ansible-dev-tools-workspace/acmecorp-playbook
+cd /projects/ansible-dev-tools-workspace
 ansible-galaxy collection install -r requirements.yml -p ./collections
 ```
 
-**Update `acmecorp-playbook/site.yml`** to use the FQCN:
+**Update `site.yml`** to use the FQCN:
 
 ```yaml
 ---
@@ -392,7 +392,7 @@ ansible-galaxy collection install -r requirements.yml -p ./collections
 > ```
 
 ```bash
-cd /projects/ansible-dev-tools-workspace/acmecorp-playbook
+cd /projects/ansible-dev-tools-workspace
 ansible-lint site.yml
 ```
 
